@@ -8,7 +8,10 @@ router.get('/', async (req, res) => {
         const getCategory = await Model.Category.findOne(
             { where: { id: products[i].category_id }}
         )
-        const category = getCategory.dataValues.category_name
+        let category = null
+        if(getCategory) {
+            category = getCategory.dataValues.category_name
+        }
         const getProductTags = await Model.ProductTag.findAll(
             { where: { product_id: products[i].id }}
         )
@@ -104,7 +107,6 @@ router.put('/:id', async (req, res) => {
         }
         req.body.category_id = findCategory.dataValues.id
     }
-
     await Model.Product.update(
         req.body,
         { where: { id: req.params.id }}
